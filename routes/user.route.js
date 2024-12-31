@@ -1,18 +1,18 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import User from '../models/user.model.js';
+import jwt from 'jsonwebtoken'
 
 const router = express.Router();
 
 // Create User (Sign Up)
 router.post('/createuser', async (req, res) => {
     try {
-        const { firstName, lastName, email, password, role, bio, skills, interests } = req.body;
-
-        // Check if email already exists
-        const existingUser = await User.findOne({ email });
+        const { userName , email, password } = req.body;
+        // Check if email and userName already exists in a single query
+        const existingUser = await User.findOne({ $or: [{ email }, { userName }] });
         if (existingUser) {
-            return res.status(400).json({ message: 'Email already registered' });
+            return res.status(400).json({ message: existingUser.email === email ? 'Email already registered' : 'UserName already registered' });
         }
 
         // Hash the password
@@ -42,9 +42,9 @@ router.get('/users', async (req, res) => {
 });
 
 // Get User by ID
-router.get('/user/:id', async (req, res) => {
+router.get('/user/:username', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findOne({ userName: req.params.username });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -57,10 +57,15 @@ router.get('/user/:id', async (req, res) => {
 // Login User
 router.post('/login', async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { userName, email, password } = req.body;
 
-        // Find user by email
-        const user = await User.findOne({ email });
+        // Find user by email or username
+        let user;
+        if (email) {
+            user = await User.findOne({ email });
+        } else if (userName) {
+            user = await User.findOne({ userName });
+        }
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -71,7 +76,10 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        res.status(200).json({ message: 'Login successful!', user });
+        // Generate token
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        res.status(200).json({ message: 'Login successful!', user, token });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
