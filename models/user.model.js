@@ -18,6 +18,12 @@ const userSchema = new mongoose.Schema({
     trim: true,
     lowercase: true
   },
+  userName: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+  },
   password: {
     type: String,
     required: true
@@ -30,6 +36,14 @@ const userSchema = new mongoose.Schema({
   bio: {
     type: String,
     trim: true
+  },
+  isAdmin:{
+    type:Boolean,
+    default: false,
+  },
+  isMentor:{
+    type:Boolean,
+    default: false,
   },
   skills: [{
     type: String,
