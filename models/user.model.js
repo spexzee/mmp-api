@@ -28,6 +28,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  phoneNumber: {
+    type: String,
+    validate: {
+      validator: function(v) {
+        return /^\d{10}$/.test(v);
+      },
+      message: props => `${props.value} is not a valid phone number!`
+    },
+  },
   role: {
     type: String,
     enum: ['mentee', 'mentor', 'admin'],
