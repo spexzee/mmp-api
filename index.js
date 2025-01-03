@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import connectDB from './db.js';
 import userRoutes from './routes/user.route.js';
+import forgotPassword from './routes/forgotPassword/forgotPassword.route.js'
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', userRoutes);
+app.use('/forgotPassword',forgotPassword)
 
 // Start the Server
 const PORT = process.env.PORT || 3000;
