@@ -18,7 +18,7 @@ const sendOtpEmail = async (toEmail, otp) => {
             from: process.env.EMAIL_USER,
             to: toEmail,
             subject: "Your OTP Code",
-            text: `Your OTP is ${otp}. It is valid for 10 minutes.`,
+            text: `Your OTP is ${otp}. It is valid for 3 minutes.`,
         };
 
         const info = await transporter.sendMail(mailOptions);
