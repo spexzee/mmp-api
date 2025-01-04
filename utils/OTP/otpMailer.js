@@ -13,6 +13,7 @@ const transporter = nodemailer.createTransport({
 
 // Function to send OTP
 const sendOtpEmail = async (toEmail, otp) => {
+    console.log(222,toEmail,otp)
     try {
         const mailOptions = {
             from: process.env.EMAIL_USER,
