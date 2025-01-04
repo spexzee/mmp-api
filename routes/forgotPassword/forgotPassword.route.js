@@ -26,14 +26,17 @@ router.get("/:key", async (req, res) => {
 
 router.put("/updatePassword", async (req, res) => {
   try {
-    const { password } = req.body;
+    const { email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const result = await UserModel.findOneAndUpdate({ hashedPassword });
-    const ans = await UserModel.findOne({ email: result.email });
+    const result = await UserModel.findOneAndUpdate(
+      { email: email },
+      { $set: { password: hashedPassword } },
+      { new: true }
+    );
     res.status(200).json({
       status: 200,
       message: "Password updated successfully!!",
-      data: ans,
+      data: result,
     });
   } catch (error) {
     res.status(200).json({ message: error.message });

@@ -4,6 +4,7 @@ import cors from 'cors';
 import connectDB from './db.js';
 import userRoutes from './routes/user.route.js';
 import forgotPassword from './routes/forgotPassword/forgotPassword.route.js'
+import otpRoute from './routes/otp.route.js'
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', userRoutes);
 app.use('/forgotPassword',forgotPassword)
+app.use('/otp', otpRoute);
 
 // Start the Server
 const PORT = process.env.PORT || 3000;
