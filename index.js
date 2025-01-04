@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import connectDB from './db.js';
+import connectDB from './models/db.js';
 import userRoutes from './routes/user.route.js';
 import forgotPassword from './routes/forgotPassword/forgotPassword.route.js'
 import otpRoute from './routes/otp.route.js'

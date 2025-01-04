@@ -1,6 +1,6 @@
-import express from "express";
-import { generateOtp, sendOtpEmail } from "../otpMailer.js";
-import { storeOtp, verifyOtp } from "../otpStorage.js";
+import express from 'express';
+import { generateOtp, sendOtpEmail } from '../utils/OTP/otpMailer.js';
+import { storeOtp, verifyOtp } from '../utils/OTP/otpStorage.js';
 
 const router = express.Router();
 
