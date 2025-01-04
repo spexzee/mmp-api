@@ -5,7 +5,6 @@ import { storeOtp, verifyOtp } from "../otpStorage.js";
 const router = express.Router();
 
 router.post("/send-otp", async (req, res) => {
-  console.log(111, req.body);
   const { email } = req.body;
 
   if (!email) {
@@ -28,9 +27,9 @@ router.post("/send-otp", async (req, res) => {
 });
 
 router.post("/verify-otp", async (req, res) => {
-    console.log('postttttt',5555555)
+
   const { email, otp } = req.body.data;
-console.log(req.body.data,11111111111,email,666, otp)
+
   if (!email || !otp) {
     return res.status(400).json({ message: "Email and OTP are required." });
   }
