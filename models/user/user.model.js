@@ -18,11 +18,12 @@ const userSchema = new mongoose.Schema({
   userName: {
     type: String,
     unique: true,
+    required:true,
     trim: true,
   },
   password: {
     type: String,
-    // required:true
+    required:true
   },
   phoneNumber: {
     type: String,
