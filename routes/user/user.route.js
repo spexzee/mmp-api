@@ -8,9 +8,9 @@ const router = express.Router();
 // Create User (Sign Up)
 router.post('/createuser', async (req, res) => {
     try {
-        const { userName , email, password } = req.body;
+        const { userName , email, password,firstName ,lastName} = req.body;
         // Check if email and userName already exists in a single query
-        const existingUser = await User.findOne({ $or: [{ email }, { userName }] });
+        const existingUser = await User.findOne({ $or: [{ email:email }, { userName:userName }] });
         if (existingUser) {
             return res.status(400).json({ message: existingUser.email === email ? 'Email already registered' : 'UserName already registered' });
         }
@@ -19,13 +19,21 @@ router.post('/createuser', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create new user
+        let FName='';
+        let LName='';
+        if(firstName===undefined|null && lastName===undefined|null){
+            FName=userName;
+            LName=userName;
+        }
         const newUser = new User({
             ...req.body,
-            password: hashedPassword
+            password: hashedPassword,
+            firstName:FName,
+            lastName:LName
         });
 
-        await newUser.save();
-        res.status(201).json({ message: 'User created successfully', user: newUser });
+        const savedUser = await newUser.save();
+        res.status(201).json({ message: 'User created successfully', user: newUser ,status:200});
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
