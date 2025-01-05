@@ -2,9 +2,10 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import connectDB from './models/db.js';
-import userRoutes from './routes/user.route.js';
+import userRoutes from './routes/user/user.route.js';
 import forgotPassword from './routes/forgotPassword/forgotPassword.route.js'
-import otpRoute from './routes/otp.route.js'
+import otpRoute from './routes/otp/otp.route.js'
+import googleRoutes from './routes/google-login/google.route.js'
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', userRoutes);
 app.use('/forgotPassword',forgotPassword)
 app.use('/otp', otpRoute);
+app.use('/api', googleRoutes)
 
 // Start the Server
 const PORT = process.env.PORT || 3000;
