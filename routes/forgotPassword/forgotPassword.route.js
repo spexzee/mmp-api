@@ -1,6 +1,6 @@
 import exprss from "express";
 import bcrypt from "bcrypt";
-import UserModel from "../../models/user.model.js";
+import UserModel from "../../models/user/user.model.js";
 import HelperFunctions from "../../HelperFunctions/HelperFunctions.js";
 
 const { isValidPhoneNumber, isValidEmail } = HelperFunctions;
