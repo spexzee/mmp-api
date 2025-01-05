@@ -25,7 +25,7 @@ router.post('/createuser', async (req, res) => {
         });
 
         await newUser.save();
-        res.status(201).json({ message: 'User created successfully', user: newUser,status:200 });
+        res.status(201).json({ message: 'User created successfully', user: newUser });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
