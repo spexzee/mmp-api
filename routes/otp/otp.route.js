@@ -3,13 +3,12 @@ import { generateOtp, sendOtpEmail } from '../../utils/otp/otpMailer.js';
 import { storeOtp, verifyOtp } from '../../utils/otp/otpStorage.js';
 
 const router = express.Router();
-let success = false;
 
 router.post("/send-otp", async (req, res) => {
   const { email } = req.body;
 
   if (!email) {
-    return res.status(400).json({success, message: "Email is required." });
+    return res.status(400).json({ message: "Email is required." });
   }
 
   const otp = generateOtp();
@@ -19,11 +18,11 @@ router.post("/send-otp", async (req, res) => {
   if (sent) {
     await storeOtp(email, otp);
     res.status(200).json({
-      success:true,
+      status: 200,
       message: "OTP sent successfully.",
     });
   } else {
-    res.status(500).json({ success , message: "Failed to send OTP. Please try again." });
+    res.status(500).json({ message: "Failed to send OTP. Please try again." });
   }
 });
 
@@ -32,15 +31,15 @@ router.post("/verify-otp", async (req, res) => {
   const { email, otp } = req.body.data;
 
   if (!email || !otp) {
-    return res.status(400).json({ success ,message: "Email and OTP are required." });
+    return res.status(400).json({ message: "Email and OTP are required." });
   }
 
   const result = await verifyOtp(email, otp);
 
   if (result.valid) {
-    res.status(200).json({success:true, message: result.message });
+    res.status(200).json({status:200, message: result.message });
   } else {
-    res.status(400).json({success, message: result.message });
+    res.status(400).json({ message: result.message });
   }
 });
 
