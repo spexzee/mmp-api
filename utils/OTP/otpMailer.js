@@ -30,6 +30,25 @@ const sendOtpEmail = async (toEmail, otp) => {
     }
 };
 
+
+const sendMessage = async (toEmail, message, subject = "Notification") => {
+    try {
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: toEmail,
+            subject: subject,
+            text: message,
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log("Email sent: " + info.response);
+        return true;
+    } catch (error) {
+        console.error("Error sending email:", error);
+        return false;
+    }
+};
+
 const generateOtp = () => {
     return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
 };
@@ -41,4 +60,4 @@ const storeOtp = (email, otp) => {
 };
 
 
-export { sendOtpEmail, generateOtp, storeOtp };
+export { sendOtpEmail, generateOtp, storeOtp , sendMessage };
