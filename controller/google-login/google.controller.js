@@ -4,6 +4,7 @@ import User from "../../models/user/user.model.js";
 import jwt from 'jsonwebtoken';
 import HelperFunctions from "../../HelperFunctions/HelperFunctions.js";
 import bcrypt  from 'bcrypt';
+import { sendMessage } from "../../utils/otp/otpMailer.js";
 
 let success = false;
 
@@ -41,6 +42,7 @@ const googleLogin = async (req, res) => {
                 password: hashedPassword,
                 image: picture,
             });
+            await sendMessage(email, `This is your default password: ${password}. You can modify it anytime.`);
         }
 
         const token = jwt.sign({ _id: user._id, email: user.email }, process.env.JWT_SECRET, {
