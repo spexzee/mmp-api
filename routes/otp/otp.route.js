@@ -2,6 +2,7 @@ import express from 'express';
 import { generateOtp, sendOtpEmail } from '../../utils/otp/otpMailer.js';
 import { storeOtp, verifyOtp } from '../../utils/otp/otpStorage.js';
 
+
 const router = express.Router();
 let success = false;
 
