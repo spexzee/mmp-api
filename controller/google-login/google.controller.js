@@ -4,7 +4,7 @@ import User from "../../models/user/user.model.js";
 import jwt from 'jsonwebtoken';
 import HelperFunctions from "../../HelperFunctions/HelperFunctions.js";
 import bcrypt  from 'bcrypt';
-import { sendMessage } from "../../utils/otp/otpMailer.js";
+import { sendMessage } from "../../utils/OTP/otpMailer.js";
 
 let success = false;
 
