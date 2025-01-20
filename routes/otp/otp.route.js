@@ -29,7 +29,7 @@ router.post("/send-otp", async (req, res) => {
 
 router.post("/verify-otp", async (req, res) => {
 
-  const { email, otp } = req.body.data;
+  const { email, otp } = req.body;
 
   if (!email || !otp) {
     return res.status(400).json({ success ,message: "Email and OTP are required." });
