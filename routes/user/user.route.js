@@ -4,7 +4,7 @@ import User from "../../models/user/user.model.js";
 import jwt from "jsonwebtoken";
 
 const router = express.Router();
-let success = false
+let success = false;
 
 // Create User (Sign Up)
 router.post("/createuser", async (req, res) => {
@@ -13,15 +13,13 @@ router.post("/createuser", async (req, res) => {
     // Check if email and userName already exists in a single query
     const existingUser = await User.findOne({ $or: [{ email }, { userName }] });
     if (existingUser) {
-      return res
-        .status(400)
-        .json({
+      return res.status(400).json({
         success,
-          message:
-            existingUser.email === email
-              ? "Email already registered"
-              : "UserName already registered",
-        });
+        message:
+          existingUser.email === email
+            ? "Email already registered"
+            : "UserName already registered",
+      });
     }
 
     // Hash the password
@@ -34,16 +32,14 @@ router.post("/createuser", async (req, res) => {
     });
 
     await newUser.save();
-    res
-      .status(201)
-      .json({
-        message: "User created successfully",
-        success : true,
-        user: newUser,
-        status: 200,
-      });
+    res.status(201).json({
+      message: "User created successfully",
+      success: true,
+      user: newUser,
+      status: 200,
+    });
   } catch (error) {
-    res.status(400).json({ success ,message: error.message });
+    res.status(400).json({ success, message: error.message });
   }
 });
 
@@ -51,9 +47,9 @@ router.post("/createuser", async (req, res) => {
 router.get("/users", async (req, res) => {
   try {
     const users = await User.find();
-    res.status(200).json({success : true , users});
+    res.status(200).json({ success: true, users });
   } catch (error) {
-    res.status(500).json({success, message: error.message });
+    res.status(500).json({ success, message: error.message });
   }
 });
 
@@ -62,11 +58,11 @@ router.get("/user/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
-      return res.status(404).json({success, message: "User not found" });
+      return res.status(404).json({ success, message: "User not found" });
     }
-    res.status(200).json({success:true ,user});
+    res.status(200).json({ success: true, user });
   } catch (error) {
-    res.status(500).json({success, message: error.message });
+    res.status(500).json({ success, message: error.message });
   }
 });
 
@@ -83,13 +79,13 @@ router.post("/login", async (req, res) => {
       user = await User.findOne({ userName });
     }
     if (!user) {
-      return res.status(404).json({success, message: "User not found" });
+      return res.status(404).json({ success, message: "User not found" });
     }
 
     // Compare passwords
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({success, message: "Invalid credentials" });
+      return res.status(401).json({ success, message: "Invalid credentials" });
     }
 
     // Generate token
@@ -97,9 +93,33 @@ router.post("/login", async (req, res) => {
       expiresIn: process.env.JWT_TIMEOUT,
     });
 
-    res.status(200).json({success: true, message: "Login successful!", user, token });
+    res
+      .status(200)
+      .json({ success: true, message: "Login successful!", user, token });
   } catch (error) {
-    res.status(500).json({success, message: error.message });
+    res.status(500).json({ success, message: error.message });
+  }
+});
+
+router.delete("/deleteUser/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    if (!userId) {
+      throw new Error("User not found!!");
+    }
+    const data = await User.findOneAndDelete({ _id: userId });
+    if (!data) {
+      return res.status(404).send({
+        message: `No document found with menuId: ${userId}`,
+      });
+    }
+    res.status(200).json({
+      status: 200,
+      message: `Users deleted Successfully`,
+      data: data,
+    });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 });
 
